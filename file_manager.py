@@ -1,84 +1,34 @@
-import os, json, re, sys
-# from pdfminer.high_level import extract_text
-from Manager import UXManager, FileManager
+import sys,json,re,os
+import FileManager
+from ux_functions import clear_cli,in_bold
 
-
-def main():
-    UXManager.clear_cli()
-    welcome_message()
+def check_files(myfilemanager):
     while True:
-        menu()
-        try:
-            user_say = input(UXManager.in_bold("Type selection here: "))
-            while user_say not in ["1", "2", "3", "4"]:
-                user_say = input(UXManager.in_bold(
-                    "Invalid choice.\n"
-                    "Type selection between 1 and 4: "))
-        except (EOFError, KeyboardInterrupt):
-            UXManager.clear_cli()
-            sys.exit(UXManager.in_bold("\nThank you for using LabTrack!\n"))
-
-        if user_say == "1":
-            check_files()
-            # TODO get path, valid pdf to use in other options
-        elif user_say == "2":
-            create_database()
-        elif user_say == "3":
-            print("three")
-        elif user_say == "4":
-            print("exit")
-            UXManager.clear_cli()
-            sys.exit(UXManager.in_bold("\nThank you for using LabTrack!\n"))
-
-
-def welcome_message():
-    print(UXManager.in_bold("Welcome to LabTrack"))
-    print("Your personal assistant to track your blood test results.\n")
-
-
-def menu():
-    print(UXManager.in_bold("LabTrack is here to help you:"))
-
-    # Create a dict, key == str & value == str
-    menu_options = {
-        "1": "Upload your lab. test files",
-        "2": "Track specific details",
-        "3": "Prepare results for sharing",
-        "4": "Exit"
-    }
-
-    for key, value in menu_options.items():
-        print(f"{UXManager.in_bold('[' + key + ']')} {value}")
-
-
-def check_files():
-    result = None
-    while True:
-        UXManager.clear_cli()
-        print(UXManager.in_bold("[ Upload your lab. test files ]\n"))
+        clear_cli()
+        print(in_bold("[ Upload your lab. test files ]\n"))
         path = access_pdf()
-        is_valid, path = FileManager.is_valid_path(path)
+        is_valid, path = myfilemanager.is_valid_path(path)
         if is_valid:
-            result = FileManager.is_valid_pdf(path)
-            print(f"Result after uploading files: {result}")
+            # myfilemanager.filepath = myfilemanager.is_valid_pdf(path)
+            print(f"Result after uploading files: {myfilemanager.filepath}")
             # TODO different return, need to standartize for usage later?
             # If path and valid returned then proceed, else print details missing
 
         upload_files()
         try:
-            user_say = input(UXManager.in_bold("Type selection here: "))
+            user_say = input(in_bold("Type selection here: "))
             while user_say not in ["1", "2"]:
-                user_say = input(UXManager.in_bold(
+                user_say = input(in_bold(
                     "Invalid choice.\n"
                     "Type selection between 1 and 2: "))
         except (EOFError, KeyboardInterrupt):
-            UXManager.clear_cli()
-            sys.exit(UXManager.in_bold("\nThank you for using LabTrack!\n"))
+            clear_cli()
+            sys.exit(in_bold("\nThank you for using LabTrack!\n"))
         if user_say == "1":
             continue
         elif user_say == "2":
-            UXManager.clear_cli()
-            return path
+            clear_cli()
+            myfilemanager.filepath=path
 
 
 def upload_files():
@@ -89,7 +39,7 @@ def upload_files():
     }
 
     for key, value in upload_files_options.items():
-        print(f"{UXManager.in_bold('[' + key + ']')} {value}")
+        print(f"{in_bold('[' + key + ']')} {value}")
 
 
 def access_pdf():
@@ -97,12 +47,12 @@ def access_pdf():
         path = input("Enter path: ")
         return path
     except (EOFError, KeyboardInterrupt):
-        UXManager.clear_cli()
-        sys.exit(UXManager.in_bold("\nThank you for using LabTrack!\n"))
+        clear_cli()
+        sys.exit(in_bold("\nThank you for using LabTrack!\n"))
 
 
-def create_database():
-    pdf_dir = r"C:\Users\simon\OneDrive\Desktop\LabTrack"
+def create_database(pdf_dir):
+    # pdf_dir = r"C:\Users\simon\OneDrive\Desktop\LabTrack"
     data_from_pdf = {}
     raw_data = {}
     # Loops over each file in the directory
@@ -166,11 +116,3 @@ def extract_data(text):
             # If the pattern is not found, store an empty string in the dictionary
             extracted_data[detail] = ""
     return extracted_data
-
-
-if __name__ == "__main__":
-    main()
-
-
-# TODO EOFError and KeyboardInterrupt repeats a lot. How to handle in one place?
-    # Also more user friendly approach be to double check if want to exit, now terminates.
