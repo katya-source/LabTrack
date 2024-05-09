@@ -32,5 +32,5 @@ def print_valid_path(is_valid, message):
 def in_bold(text):
     return f"{Style.BRIGHT}{text}{Style.RESET_ALL}"
 
-def clear_cli():
+def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')

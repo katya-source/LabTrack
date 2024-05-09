@@ -9,21 +9,21 @@ class FileManager:
     @property
     def filepath(self):
         return self._filepath
-    
+
     @filepath.setter
     def filepath(self,filepathname):
         self._filepath=filepathname
 
-    def is_valid_path(path):
-        is_valid = os.path.isdir(path)
+    def is_valid_path(self):
+        is_valid = os.path.isdir(self.filepath)
         if is_valid:
-            message = (f"\nFolder is found:\n{path}\n")
+            message = (f"\nFolder is found:\n{self.filepath}\n")
         else:
-            message = (f"\nFolder is not found:\n{path}\n"
+            message = (f"\nFolder is not found:\n{self.filepath}\n"
                        "Check and try again.")
         print_valid_path(is_valid, message)
         # return is_valid
-        return is_valid, path if is_valid else None
+        return is_valid
 
     def is_valid_pdf(path):
         result = {"Valid": [],

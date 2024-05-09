@@ -86,5 +86,5 @@ class UXManager:
         return f"{Style.BRIGHT}{text}{Style.RESET_ALL}"
 
     @staticmethod
-    def clear_cli():
+    def clear_screen():
         os.system('cls' if os.name == 'nt' else 'clear')

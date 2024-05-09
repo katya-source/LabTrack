@@ -1,19 +1,24 @@
-from Manager import UXManager
+import sys
+from ux_functions import in_bold,clear_screen
 
 def welcome_message():
-    print(UXManager.in_bold("Welcome to LabTrack"))
+    print(in_bold("Welcome to LabTrack"))
     print("Your personal assistant to track your blood test results.\n")
 
 def menu():
-    print(UXManager.in_bold("LabTrack is here to help you:"))
+    print(in_bold("LabTrack is here to help you:"))
 
     # Create a dict, key == str & value == str
     menu_options = {
         "1": "Upload your lab. test files",
         "2": "Track specific details",
-        "3": "Prepare results for sharing",
+        "3": "Export to csv",
         "4": "Exit"
     }
 
     for key, value in menu_options.items():
-        print(f"{UXManager.in_bold('[' + key + ']')} {value}")
+        print(f"{in_bold('[' + key + ']')} {value}")
+
+def quit_program():
+    clear_screen()
+    sys.exit(in_bold("\nThank you for using LabTrack!\n"))

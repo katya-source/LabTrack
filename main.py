@@ -1,14 +1,16 @@
 import sys
 from FileManager import FileManager
-from ux_functions import clear_cli,in_bold
-from file_manager import check_files,create_database
-from helper_functions import welcome_message,menu
+from ux_functions import clear_screen,in_bold
+from file_manager import get_filepath,create_database
+from helper_functions import welcome_message,menu,quit_program
+from export_functions import export_to_csv
 
 
 def main():
     myfilemanager = FileManager()
-    clear_cli()
+    clear_screen()
     welcome_message()
+
     while True:
         menu()
         try:
@@ -18,22 +20,18 @@ def main():
                     "Invalid choice.\n"
                     "Type selection between 1 and 4: "))
         except (EOFError, KeyboardInterrupt):
-            clear_cli()
-            sys.exit(in_bold("\nThank you for using LabTrack!\n"))
+            quit_program
 
         if user_say == "1":
-            print(myfilemanager.filepath)
-            check_files(myfilemanager)
-            print(myfilemanager.filepath)
+            get_filepath(myfilemanager)
             # TODO get path, valid pdf to use in other options
         elif user_say == "2":
+            # create a database and put it into database.json
             create_database(myfilemanager.filepath)
         elif user_say == "3":
-            print("three")
+            export_to_csv()
         elif user_say == "4":
-            print("exit")
-            clear_cli()
-            sys.exit(in_bold("\nThank you for using LabTrack!\n"))
+            quit_program
 
 
 

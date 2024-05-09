@@ -1,60 +1,66 @@
 import sys,json,re,os
 import FileManager
-from ux_functions import clear_cli,in_bold
+from pdfminer.high_level import extract_text
+from ux_functions import clear_screen,in_bold
+from helper_functions import quit_program
 
-def check_files(myfilemanager):
+def get_filepath(myfilemanager):
     while True:
-        clear_cli()
+        clear_screen()
         print(in_bold("[ Upload your lab. test files ]\n"))
-        path = access_pdf()
-        is_valid, path = myfilemanager.is_valid_path(path)
-        if is_valid:
-            # myfilemanager.filepath = myfilemanager.is_valid_pdf(path)
-            print(f"Result after uploading files: {myfilemanager.filepath}")
-            # TODO different return, need to standartize for usage later?
-            # If path and valid returned then proceed, else print details missing
 
-        upload_files()
         try:
+            myfilemanager.filepath = input("Enter path: ")
+            is_valid = myfilemanager.is_valid_path()
+
+            if is_valid:
+                print(f"Result after uploading files: {myfilemanager.filepath}")
+                # TODO different return, need to standartize for usage later?
+                # If path and valid returned then proceed, else print details missing
+                return
+
+            print('Try again')
+            print('Go back to main menu')
+
             user_say = input(in_bold("Type selection here: "))
+
             while user_say not in ["1", "2"]:
                 user_say = input(in_bold(
                     "Invalid choice.\n"
                     "Type selection between 1 and 2: "))
+
+            if user_say == "1":
+                continue
+
+            clear_screen()
+            return
+
         except (EOFError, KeyboardInterrupt):
-            clear_cli()
-            sys.exit(in_bold("\nThank you for using LabTrack!\n"))
-        if user_say == "1":
-            continue
-        elif user_say == "2":
-            clear_cli()
-            myfilemanager.filepath=path
+            quit_program
 
 
-def upload_files():
-    print()
+    # print('\n')
     upload_files_options = {
-        "1": "Enter path again",
-        "2": "Back",
+        # "1": "Enter path again",
+        # "2": "Back",
     }
 
-    for key, value in upload_files_options.items():
-        print(f"{in_bold('[' + key + ']')} {value}")
+    # for key, value in upload_files_options.items():
+    #     print(f"{in_bold('[' + key + ']')} {value}")
 
-
-def access_pdf():
-    try:
-        path = input("Enter path: ")
-        return path
-    except (EOFError, KeyboardInterrupt):
-        clear_cli()
-        sys.exit(in_bold("\nThank you for using LabTrack!\n"))
+# def access_pdf():
+#     try:
+#         path = input("Enter path: ")
+#         return path
+#     except (EOFError, KeyboardInterrupt):
+#         clear_screen()
+#         sys.exit(in_bold("\nThank you for using LabTrack!\n"))
 
 
 def create_database(pdf_dir):
-    # pdf_dir = r"C:\Users\simon\OneDrive\Desktop\LabTrack"
     data_from_pdf = {}
     raw_data = {}
+    
     # Loops over each file in the directory
     for filename in os.listdir(pdf_dir):
         # Checks if the file is a PDF

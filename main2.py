@@ -4,7 +4,7 @@ from Manager import UXManager, FileManager
 
 
 def main():
-    UXManager.clear_cli()
+    UXManager.clear_screen()
     welcome_message()
     while True:
         menu()
@@ -15,11 +15,11 @@ def main():
                     "Invalid choice.\n"
                     "Type selection between 1 and 4: "))
         except (EOFError, KeyboardInterrupt):
-            UXManager.clear_cli()
+            UXManager.clear_screen()
             sys.exit(UXManager.in_bold("\nThank you for using LabTrack!\n"))
 
         if user_say == "1":
-            check_files()
+            get_filepath()
             # TODO get path, valid pdf to use in other options
         elif user_say == "2":
             create_database()
@@ -27,7 +27,7 @@ def main():
             print("three")
         elif user_say == "4":
             print("exit")
-            UXManager.clear_cli()
+            UXManager.clear_screen()
             sys.exit(UXManager.in_bold("\nThank you for using LabTrack!\n"))
 
 
@@ -51,10 +51,10 @@ def menu():
         print(f"{UXManager.in_bold('[' + key + ']')} {value}")
 
 
-def check_files():
+def get_filepath():
     result = None
     while True:
-        UXManager.clear_cli()
+        UXManager.clear_screen()
         print(UXManager.in_bold("[ Upload your lab. test files ]\n"))
         path = access_pdf()
         is_valid, path = FileManager.is_valid_path(path)
@@ -72,12 +72,12 @@ def check_files():
                     "Invalid choice.\n"
                     "Type selection between 1 and 2: "))
         except (EOFError, KeyboardInterrupt):
-            UXManager.clear_cli()
+            UXManager.clear_screen()
             sys.exit(UXManager.in_bold("\nThank you for using LabTrack!\n"))
         if user_say == "1":
             continue
         elif user_say == "2":
-            UXManager.clear_cli()
+            UXManager.clear_screen()
             return path
 
 
@@ -97,7 +97,7 @@ def access_pdf():
         path = input("Enter path: ")
         return path
     except (EOFError, KeyboardInterrupt):
-        UXManager.clear_cli()
+        UXManager.clear_screen()
         sys.exit(UXManager.in_bold("\nThank you for using LabTrack!\n"))
 
 
